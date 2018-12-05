@@ -7,15 +7,8 @@
 <h2>Index</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-controller="Posts" asp-action="Create">Create New</a>
 </p>
-
-<div>
-    <form action="/posts/Create" method="post">
-        <textarea></textarea><br/>
-        <input type="submit" value="Create" />
-    </form>
-</div>
 
 @foreach (var item in Model)
 {

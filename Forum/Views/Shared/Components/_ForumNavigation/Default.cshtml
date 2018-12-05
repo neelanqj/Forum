@@ -14,7 +14,7 @@
                                @: <li>
                                     @foreach (Topic topic in category.Topics)
                                     {
-                                        @:<a href="#">
+                                        @:<a href="/Posts/@topic.Category.Name/@topic.Name">
                                             @topic.Name
                                         @:</a>
                                     }
@@ -22,9 +22,6 @@
                             @: </ul>
                     @: </li>
                 }
-                <li><a asp-area="" asp-controller="Home" asp-action="Index"></a></li>
-                <li><a asp-area="" asp-controller="Topics" asp-action="Index"></a></li>
-                <li><a asp-area="" asp-controller="Categories" asp-action="Index"></a></li>
             </ul>
         </div>
 </nav>

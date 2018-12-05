@@ -20,8 +20,8 @@ namespace Forum.Controllers
 
         public IActionResult Index()
         {
-            List<Post> Posts = _context.posts.ToList();
-            return View();
+            List<Post> posts = _context.posts.Take(10).ToList();
+            return View(posts);
         }
 
         public IActionResult Navigation()

@@ -9,8 +9,7 @@ using Forum.Data;
 using Forum.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Forum.Controllers
-{
+namespace Forum.Controllers { 
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -26,8 +25,23 @@ namespace Forum.Controllers
             var applicationDbContext = _context.posts
                 .Include(p => p.Topic)
                 .Include(u => u.User);
+
             return View(await applicationDbContext.ToListAsync());
         }
+
+        [HttpGet]
+        [Route("/Posts/{category}/{topic}")]
+        public async Task<IActionResult> Index(string category, string topic)
+        {
+            List<Post> posts = await _context.posts
+                .Include(t=> t.Topic)
+                .Include(c => c.Topic.Category)
+                .Where(p => p.Topic.Name == topic && p.Topic.Category.Name == category)
+                .ToListAsync();
+
+            return View(posts);
+        }
+        
 
         // GET: posts/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -50,7 +64,7 @@ namespace Forum.Controllers
 
         // GET: posts/Create
         [Authorize]
-
+        [Route("/Posts/Create")]
         public IActionResult Create()
         {
             ViewData["TopicId"] = new SelectList(_context.topics, "TopicId", "TopicId");
@@ -63,6 +77,7 @@ namespace Forum.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
+        [Route("/Posts/Create")]
 
         public async Task<IActionResult> Create([Bind("PostId,Details,TopicId")] Post post)
         {
@@ -78,6 +93,7 @@ namespace Forum.Controllers
 
         // GET: posts/Edit/5    
         [Authorize]
+        [Route("/Posts/Edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -100,6 +116,7 @@ namespace Forum.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
+        [Route("/Posts/Edit/{id}")]
 
         public async Task<IActionResult> Edit(int id, [Bind("PostId,Details,TopicId")] Post post)
         {
@@ -134,6 +151,7 @@ namespace Forum.Controllers
 
         // GET: posts/Delete/5
         [Authorize]
+        [Route("/Posts/Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
