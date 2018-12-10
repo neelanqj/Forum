@@ -13,6 +13,7 @@ using Forum.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Forum.Models;
+using Forum.Extensions;
 
 namespace Forum
 {
@@ -44,6 +45,7 @@ namespace Forum
                 options.UseMySql(
                     Configuration.GetConnectionString("Default")));
             services.AddDefaultIdentity<User>()
+                .AddUserManager<CustomUserManager>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

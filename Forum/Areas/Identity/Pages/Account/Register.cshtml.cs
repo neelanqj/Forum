@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Forum.Areas.Identity.Pages.Account
 {
@@ -101,8 +102,9 @@ namespace Forum.Areas.Identity.Pages.Account
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-                catch (Exception Db)
+                catch (DbUpdateException ex)
                 {
+                    ModelState.AddModelError(string.Empty, "Username already exists. Pick another.");
 
                 }
             }
