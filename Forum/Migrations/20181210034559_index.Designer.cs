@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Forum.Data.Migrations
+namespace Forum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181128185408_removetitlefromposts")]
-    partial class removetitlefromposts
+    [Migration("20181210034559_index")]
+    partial class index
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -127,6 +127,9 @@ namespace Forum.Data.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
+                    b.Property<string>("WebName")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -135,6 +138,9 @@ namespace Forum.Data.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasName("UserNameIndex");
+
+                    b.HasIndex("WebName")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });
@@ -272,7 +278,7 @@ namespace Forum.Data.Migrations
             modelBuilder.Entity("Forum.Models.Topic", b =>
                 {
                     b.HasOne("Forum.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Topics")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 

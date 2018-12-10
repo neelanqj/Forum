@@ -41,7 +41,19 @@ namespace Forum.Controllers {
 
             return View(posts);
         }
-        
+
+        [HttpGet]
+        [Route("/Posts/{category}/{topic}")]
+        public async Task<IActionResult> Index(string category, string topic, string searchString, string sortOrder)
+        {
+            List<Post> posts = await _context.posts
+                .Include(t => t.Topic)
+                .Include(c => c.Topic.Category)
+                .Where(p => p.Topic.Name == topic && p.Topic.Category.Name == category)
+                .ToListAsync();
+
+            return View(posts);
+        }
 
         // GET: posts/Details/5
         public async Task<IActionResult> Details(int? id)

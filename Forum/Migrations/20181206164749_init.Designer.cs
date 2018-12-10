@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Forum.Data.Migrations
+namespace Forum.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181126165506_users")]
-    partial class users
+    [Migration("20181206164749_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,13 +30,11 @@ namespace Forum.Data.Migrations
 
                     b.Property<DateTime>("ReviseDate");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
+                    b.Property<string>("UserId");
 
                     b.HasKey("CategoryId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("categories");
                 });
@@ -52,19 +50,15 @@ namespace Forum.Data.Migrations
 
                     b.Property<DateTime>("ReviseDate");
 
-                    b.Property<string>("Title");
-
                     b.Property<int>("TopicId");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
+                    b.Property<string>("UserId");
 
                     b.HasKey("PostId");
 
                     b.HasIndex("TopicId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("posts");
                 });
@@ -80,15 +74,13 @@ namespace Forum.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
+                    b.Property<string>("UserId");
 
                     b.HasKey("TopicId");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("topics");
                 });
@@ -134,6 +126,8 @@ namespace Forum.Data.Migrations
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
+
+                    b.Property<string>("WebName");
 
                     b.HasKey("Id");
 
@@ -262,7 +256,7 @@ namespace Forum.Data.Migrations
                 {
                     b.HasOne("Forum.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Forum.Models.Post", b =>
@@ -274,19 +268,19 @@ namespace Forum.Data.Migrations
 
                     b.HasOne("Forum.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Forum.Models.Topic", b =>
                 {
                     b.HasOne("Forum.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Topics")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Forum.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
