@@ -8,15 +8,22 @@ using Microsoft.EntityFrameworkCore;
 using Forum.Data;
 using Forum.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace Forum.Controllers { 
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        
+        protected UserManager<User> _userManager;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Posts
@@ -34,6 +41,7 @@ namespace Forum.Controllers {
         public async Task<IActionResult> Index(string category, string topic)
         {
             List<Post> posts = await _context.posts
+                .Include(u=>u.User)
                 .Include(t=> t.Topic)
                 .Include(c => c.Topic.Category)
                 .Where(p => p.Topic.Name == topic && p.Topic.Category.Name == category)
@@ -55,8 +63,11 @@ namespace Forum.Controllers {
             }
 
             var post = await _context.posts
+                .Include(u=>u.User)
                 .Include(p => p.Topic)
+                .ThenInclude(c=>c.Category)
                 .Include(c => c.Comments)
+                .ThenInclude(uc=>uc.User)
                 .FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
             {
@@ -81,7 +92,8 @@ namespace Forum.Controllers {
         public IActionResult Create(string topic)
         {
             Topic item = _context.topics.Where(t => t.Name == topic).FirstOrDefault();
-            ViewData["TopicId"] = new SelectList(_context.topics, "TopicId", "Name", item.TopicId);
+            ViewData["CurrentTopic"] = item.TopicId;
+            ViewData["TopicId"] = new SelectList(_context.topics, "TopicId", "Name", item);
             
             return View();
         }
@@ -98,6 +110,7 @@ namespace Forum.Controllers {
         {
             if (ModelState.IsValid)
             {
+                post.User = await _userManager.GetUserAsync(HttpContext.User); 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

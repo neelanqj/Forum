@@ -9,8 +9,18 @@
         <h2>Recent Posts</h2>
         @foreach(Post post in Model)
         {
-            @post.Details.Substring(0,Math.Min(10,post.Details.Length))
-            @:<br /><hr/><br/>
+            @: <div class="well">
+                   <div class="well">
+                       @Html.ActionLink(post.Details.Substring(0, Math.Min(10, post.Details.Length)), "Details", "Posts", new { id = post.PostId }, null)
+                      
+                   </div>
+                   <div>
+                       @post.User.WebName
+                       @post.Topic.Category.Name 
+                       @post.Topic.Name 
+                       @post.CreateDate
+                   </div>
+            @: </div>
         }
     </div>
     <div class="col-md-3">

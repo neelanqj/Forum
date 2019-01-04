@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Forum.Models;
 using Forum.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Forum.Controllers
 {
@@ -20,7 +21,11 @@ namespace Forum.Controllers
 
         public IActionResult Index()
         {
-            List<Post> posts = _context.posts.Take(10).ToList();
+            List<Post> posts = _context.posts
+                .Include(u => u.User)
+                .Include(t => t.Topic)
+                .ThenInclude(c => c.Category)
+                .Take(10).ToList();
             return View(posts);
         }
 

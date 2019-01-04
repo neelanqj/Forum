@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Forum.Data;
 using Forum.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Forum.Controllers
 {
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        protected UserManager<User> _userManager;
 
-        public CommentsController(ApplicationDbContext context)
+        public CommentsController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Comments
@@ -81,6 +84,7 @@ namespace Forum.Controllers
         {
             if (ModelState.IsValid)
             {
+                comment.User = await _userManager.GetUserAsync(HttpContext.User);
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));

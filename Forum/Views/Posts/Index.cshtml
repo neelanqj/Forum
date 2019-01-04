@@ -12,9 +12,17 @@
 
 @foreach (var item in Model)
 {
-    @item.CreateDate
-    @: <br />
-    @Html.ActionLink(item.Details, "Details", "Posts", new { id = item.PostId }, null)
+    @: <div class="well">
+    
+        @: <div class="well">
+            @Html.ActionLink(item.Details, "Details", "Posts", new { id = item.PostId }, null)
+        @:</div>
 
-    <br /><br />
+        <div>
+            @item.User.WebName
+            @item.Topic.Category.Name
+            @item.Topic.Name
+            @item.CreateDate
+        </div>
+    @: </div>
 }
