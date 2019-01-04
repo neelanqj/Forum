@@ -78,7 +78,6 @@ namespace Forum.Areas.Identity.Pages.Account
                 try
                 {
                     var result = await _userManager.CreateAsync(user, Input.Password);
-                
 
                     if (result.Succeeded)
                     {
@@ -105,6 +104,7 @@ namespace Forum.Areas.Identity.Pages.Account
                 catch (DbUpdateException ex)
                 {
                     ModelState.AddModelError(string.Empty, "Username already exists. Pick another.");
+                    ModelState.AddModelError(string.Empty, ex.Message);
 
                 }
             }

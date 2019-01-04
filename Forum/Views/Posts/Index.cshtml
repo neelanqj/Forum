@@ -7,13 +7,14 @@
 <h2>Index</h2>
 
 <p>
-    <a asp-controller="Posts" asp-action="Create">Create New</a>
+    <a asp-controller="Posts" asp-action="Create" sp-route-id="@ViewBag.Topic">Create New</a>
 </p>
 
 @foreach (var item in Model)
 {
-    @item.CreateDate 
+    @item.CreateDate
     @: <br />
-    @item.Details
-    @: <br /><br />
+    @Html.ActionLink(item.Details, "Details", "Posts", new { id = item.PostId }, null)
+
+    <br /><br />
 }

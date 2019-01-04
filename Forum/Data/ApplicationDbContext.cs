@@ -14,6 +14,7 @@ namespace Forum.Data
         public DbSet<Topic> topics { get; set; }
         public DbSet<Category> categories { get; set; }
         public DbSet<User> users { get; set; }
+        public DbSet<Comment> comments { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -27,5 +28,6 @@ namespace Forum.Data
                 .HasIndex(b => b.WebName )
                 .IsUnique();
         }
+        public DbSet<Forum.Models.Comment> Comment { get; set; }
     }
 }

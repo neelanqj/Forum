@@ -38,24 +38,15 @@ namespace Forum.Controllers {
                 .Include(c => c.Topic.Category)
                 .Where(p => p.Topic.Name == topic && p.Topic.Category.Name == category)
                 .ToListAsync();
+            ViewData["Topic"] = topic; 
 
             return View(posts);
         }
-
-        [HttpGet]
-        [Route("/Posts/{category}/{topic}")]
-        public async Task<IActionResult> Index(string category, string topic, string searchString, string sortOrder)
-        {
-            List<Post> posts = await _context.posts
-                .Include(t => t.Topic)
-                .Include(c => c.Topic.Category)
-                .Where(p => p.Topic.Name == topic && p.Topic.Category.Name == category)
-                .ToListAsync();
-
-            return View(posts);
-        }
+        
 
         // GET: posts/Details/5
+        [HttpGet]
+        [Route("/Posts/Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -65,6 +56,7 @@ namespace Forum.Controllers {
 
             var post = await _context.posts
                 .Include(p => p.Topic)
+                .Include(c => c.Comments)
                 .FirstOrDefaultAsync(m => m.PostId == id);
             if (post == null)
             {
@@ -79,7 +71,18 @@ namespace Forum.Controllers {
         [Route("/Posts/Create")]
         public IActionResult Create()
         {
-            ViewData["TopicId"] = new SelectList(_context.topics, "TopicId", "TopicId");
+            ViewData["TopicId"] = new SelectList(_context.topics, "TopicId", "Name");
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("/Posts/Create/{topic}")]
+        public IActionResult Create(string topic)
+        {
+            Topic item = _context.topics.Where(t => t.Name == topic).FirstOrDefault();
+            ViewData["TopicId"] = new SelectList(_context.topics, "TopicId", "Name", item.TopicId);
+            
             return View();
         }
 

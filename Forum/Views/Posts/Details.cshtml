@@ -5,26 +5,29 @@
 }
 
 <h2>Details</h2>
+@Model.Details
 
-<div>
-    <h4>Post</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Details)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Details)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Topic)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Topic.TopicId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.PostId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+@foreach (var comment in Model.Comments)
+{
+    @: <div class="highlight">
+        @comment.Details
+        @: <br />
+        @comment.CreateDate
+    @: </div>
+}
+
+       <div class="highlight">
+           <form asp-controller="Comments" asp-action="Create">
+               <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               <div class="form-group">
+                   <input type="hidden" name="PostId" value="@Model.PostId" />
+               </div>
+               <div class="form-group">
+                   <textarea class="form-control" name="Details"></textarea>
+                   <span asp-validation-for="Details" class="text-danger"></span>
+               </div>
+               <div class="form-group">
+                   <input type="submit" value="Create" class="btn btn-default" />
+               </div>
+           </form>
+        </div>

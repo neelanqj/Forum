@@ -9,7 +9,7 @@
         <h2>Recent Posts</h2>
         @foreach(Post post in Model)
         {
-            @post.Details.Substring(10)
+            @post.Details.Substring(0,Math.Min(10,post.Details.Length))
             @:<br /><hr/><br/>
         }
     </div>
