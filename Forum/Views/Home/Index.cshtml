@@ -2,27 +2,19 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
-    <div class="col-md-3">
-    </div>
-    <div class="col-md-6">
-        <h2>Recent Posts</h2>
-        @foreach(Post post in Model)
-        {
-            @: <div class="well">
-                   <div class="well">
-                       @Html.ActionLink(post.Details.Substring(0, Math.Min(10, post.Details.Length)), "Details", "Posts", new { id = post.PostId }, null)
+    <h2>Recent Posts</h2>
+    @foreach(Post post in Model)
+    {
+        @: <div class="well">
+                <div class="well">
+                    @Html.ActionLink(post.Details.Substring(0, Math.Min(10, post.Details.Length)), "Details", "Posts", new { id = post.PostId }, null)
                       
-                   </div>
-                   <div>
-                       @post.User.WebName
-                       @post.Topic.Category.Name 
-                       @post.Topic.Name 
-                       @post.CreateDate
-                   </div>
-            @: </div>
-        }
-    </div>
-    <div class="col-md-3">
-    </div>
-</div>
+                </div>
+                <div>
+                    @post.User.WebName
+                    @post.Topic.Category.Name 
+                    @post.Topic.Name 
+                    @post.CreateDate
+                </div>
+        @: </div>
+    }
